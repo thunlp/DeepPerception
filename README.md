@@ -9,7 +9,7 @@ Xinyu Ma, Ziyang Ding, Zhicong Luo, Chi Chen, Zonghao Guo, Derek F. Wong, Xiaoyi
 <a href=''><img src='https://img.shields.io/badge/Benchmark-Huggingface-yellow'></a> 
 <a href=''><img src='https://img.shields.io/badge/Dataset-Huggingface-blue'></a> 
 
-This is the official repository of [DeepPerception](), 
+This is the official repository of [DeepPerception](), an MLLM enhanced with cognitive visual perception capabilities.
 
 ## Release
 
