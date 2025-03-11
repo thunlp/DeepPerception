@@ -15,7 +15,35 @@ This is the official repository of [DeepPerception](), an MLLM enhanced with cog
 
 - [x] **`2025.03.14`** 🔥DeepPerception Paper has been released in [`📕Arxiv`]().
 
+## Get Started
+
+### Contents:
+
+- [Environment](#environment)
+- [Data Preparation](#data-preparation)
+- [Checkpoints](#checkpoints)
+- [Evaluation and Inference](#evaluation-and-inference)
+- [Training](#training)
+
+### Environment
+
+### Data Preparation
+
+### Checkpoints
+
+### Evaluation and Inference
+
+### Training
+
+## Acknowledgement
+
 ## Citation
+
+If you find DeepPerception useful for your research or applications, please cite using this BibTeX:
+
 ```bibtex
 TODO
 ```
+
+## License
+
