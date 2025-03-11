@@ -13,7 +13,7 @@ This is the official repository of [DeepPerception](),
 
 ## Release
 
-- [] **`2025.03.14`** 🔥DeepPerception Paper has been released in [`📕Arxiv`]().
+- [x] **`2025.03.14`** 🔥DeepPerception Paper has been released in [`📕Arxiv`]().
 
 ## Citation
 ```bibtex
