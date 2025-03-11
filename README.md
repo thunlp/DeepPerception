@@ -17,7 +17,9 @@ This is the official repository of [DeepPerception](), an MLLM enhanced with cog
 
 ## Overview
 
-
+<p align="center">
+    <img src="figs/header.png" width="100%"></a>
+</p>
 
 ## Get Started
 
