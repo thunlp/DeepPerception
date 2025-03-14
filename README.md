@@ -55,7 +55,7 @@ cd DeepPerception
 ```
 2. Install Packages
 ```bash
-conda env create -n deepperception python=3.?
+conda env create -n deepperception python=3.11
 conda activate deepperception
 
 pip install -r requirements.txt
@@ -63,7 +63,15 @@ pip install -r requirements.txt
 
 ### Data Preparation
 
+
+
 ### Checkpoints
+
+| Model                               | Links                                  |
+|---------                            |---------------------------------------|
+| DeepPerception                      | [`🤗HuggingFace`](https://huggingface.co/MaxyLee/DeepPerception)    |
+| DeepPerception-FGVR                 | [`🤗HuggingFace`](https://huggingface.co/MaxyLee/DeepPerception-FGVR)    |
+---
 
 ### Evaluation and Inference
 
