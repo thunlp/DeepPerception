@@ -5,7 +5,7 @@ CKPT=$3
 
 if [[ $DATA_PATH == *"kvg-bench"* ]]; then 
 # KVG-Bench
-OUT_DIR=$CKPT/kvg-bench-eval-novllm
+OUT_DIR=$CKPT/kvg-bench-eval
 
 # Evaluate DeepPerception
 # To ensure precise reproduction of the experimental results of KVG-Bench presented in the paper, please strictly adhere to the package versions specified in the requirements.txt file and DO NOT use the vllm.
