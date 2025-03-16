@@ -13,7 +13,8 @@ This is the official repository of **DeepPerception**, an MLLM enhanced with cog
 
 ## Release
 
-- [x] **`2025.03.14`** 🔥DeepPerception Paper has been released in [`📕Arxiv`]().
+- [x] **`2025.03.17`** Release the DeepPerception evaluation code and model in [`🤗HuggingFace`](https://huggingface.co/MaxyLee/DeepPerception).
+- [x] **`2025.03.17`** 🔥DeepPerception Paper has been released in [`📕Arxiv`]().
 
 ## Overview
 
@@ -43,7 +44,7 @@ Experimental results demonstrate that DeepPerception significantly outperforms d
 - [Environment](#environment)
 - [Data Preparation](#data-preparation)
 - [Checkpoints](#checkpoints)
-- [Evaluation and Inference](#evaluation-and-inference)
+- [Evaluation](#evaluation)
 - [Training](#training)
 
 ### Environment
@@ -54,6 +55,7 @@ git clone https://github.com/MaxyLee/DeepPerception.git
 cd DeepPerception
 ```
 2. Install Packages
+For evaluation:
 ```bash
 conda env create -n deepperception python=3.11
 conda activate deepperception
@@ -63,7 +65,10 @@ pip install -r requirements.txt
 
 ### Data Preparation
 
-
+| Dataset                             | Links                                  |
+|---------                            |---------------------------------------|
+| KVG-Bench                           | [`🤗HuggingFace`](https://huggingface.co/datasets/MaxyLee/KVG-Bench)    |
+---
 
 ### Checkpoints
 
@@ -73,12 +78,17 @@ pip install -r requirements.txt
 | DeepPerception-FGVR                 | [`🤗HuggingFace`](https://huggingface.co/MaxyLee/DeepPerception-FGVR)    |
 ---
 
-### Evaluation and Inference
+### Evaluation
 
-
+```bash
+# Evaluate on KVG-Bench
+bash eval.sh [CUDA_IDS] [KVG_BENCH_PATH] [CKPT_PATH]
+```
+Notice: Please modify the script if you want to evaluate Qwen2-VL
 
 ### Training
 
+TODO
 
 ## Citation
 
@@ -90,5 +100,12 @@ TODO
 
 ## Acknowledgement
 
+- [Qwen2-VL](https://github.com/QwenLM/Qwen2.5-VL)
+- [vLLM](https://github.com/vllm-project/vllm)
+- [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory)
+- [R1-V](https://github.com/Deep-Agent/R1-V)
+
 ## License
 
+[![Code License](https://img.shields.io/badge/Code%20License-MIT-green.svg)](https://github.com/twbs/bootstrap/blob/main/LICENSE)
+[![Data License](https://img.shields.io/badge/Code%20License-Apache_2.0-green.svg)](https://github.com/tatsu-lab/stanford_alpaca/blob/main/LICENSE)
