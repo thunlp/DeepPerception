@@ -13,7 +13,7 @@ This is the official repository of **DeepPerception**, an MLLM enhanced with cog
 
 ## Release
 
-- [x] **`2025.03.17`** Release the DeepPerception evaluation code and model in [`🤗HuggingFace`](https://huggingface.co/MaxyLee/DeepPerception).
+- [x] **`2025.03.17`** 🔥Release the DeepPerception evaluation code and model in [`🤗HuggingFace`](https://huggingface.co/MaxyLee/DeepPerception).
 - [x] **`2025.03.17`** 🔥DeepPerception Paper has been released in [`📕Arxiv`]().
 
 ## Overview
