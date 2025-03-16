@@ -1,4 +1,5 @@
 import argparse
+import io
 import os
 import re
 import json
@@ -15,7 +16,9 @@ from qwen_vl_utils import process_vision_info
 PATTERN = re.compile(r'<\|box_start\|>\(([0-9]*?),([0-9]*?)\),\(([0-9]*?),([0-9]*?)\)<\|box_end\|>')
 REF_PATTERN = re.compile(r'<\|object_ref_start\|>(.*?)<\|object_ref_end\|>')
 
-QUESTION_TEMPLATE = "{Question}  Output the thinking process in <think> </think> and final answer (bounding box) in <answer> </answer> tags."
+GROUNDING_TEMPLATE = "{Question}  Output the thinking process in <think> </think> and final answer (bounding box) in <answer> </answer> tags."
+# QUESTION_TEMPLATE = "{Question}  Output the thinking process in <think> </think> and final answer (bounding box in (x1,y1),(x2,y2) format) in <answer> </answer> tags."
+CLASSIFICATION_TEMPLATE = "{Question}  Output the thinking process in <think> </think> and final answer in <answer> </answer> tags."
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Training")
@@ -32,8 +35,40 @@ def parse_args():
 
     return args
 
+def inference_classification(model, processor, sampling_params, prompt, query, image):
+    messages = []
+    
+    if prompt == 'r1':
+        query = CLASSIFICATION_TEMPLATE.format(Question=query)
+        messages.append({"role": "user", "content": [dict(type='image', image=image), dict(type='text', text=query)]})
+    else:
+        messages.append({"role": "user", "content": [dict(type='image', image=image), dict(type='text', text=query)]})
+    
+    text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+    image_inputs, _ = process_vision_info(messages)
+    if sampling_params:
+        llm_inputs = {
+            "prompt": text,
+            "multi_modal_data": {
+                "image": image_inputs
+            }
+        }
+        outputs = model.generate([llm_inputs], sampling_params=sampling_params)
+        generated_text = outputs[0].outputs[0].text
+    else:
+        inputs = processor(text=[text], images=image_inputs, padding=True, return_tensors="pt").to(model.device)
+        
+        generated_ids = model.generate(**inputs, max_new_tokens=1500)
+        generated_ids_trimmed = [out_ids[len(in_ids) :] for in_ids, out_ids in zip(inputs.input_ids, generated_ids)]
+        response = processor.batch_decode(generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False)
+        generated_text = response[0]
+    
+    return {
+        'answer': generated_text,
+    }
+
 def inference_grounding(model, processor, sampling_params, prompt, query, image_bytes):
-    encoded_string = base64.b64encode(image_bytes).decode("utf-8")
+    encoded_string = 'data:image:base64,' + str(base64.b64encode(image_bytes).decode("utf-8"))
     messages = []
     cot_response = None
     # CoT
@@ -60,7 +95,7 @@ def inference_grounding(model, processor, sampling_params, prompt, query, image_
         else:
             inputs = processor(text=[text], padding=True, return_tensors="pt").to(model.device)
             
-            generated_ids = model.generate(**inputs, max_new_tokens=512)
+            generated_ids = model.generate(**inputs, max_new_tokens=1500)
             generated_ids_trimmed = [out_ids[len(in_ids) :] for in_ids, out_ids in zip(inputs.input_ids, generated_ids)]
             cot_response = processor.batch_decode(generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0]
         
@@ -69,12 +104,12 @@ def inference_grounding(model, processor, sampling_params, prompt, query, image_
         messages.append({"role": "user", "content": [dict(type='text', text=grounding_text)]})
     elif prompt == 'cot-normal':
         query += ". Let's think step by step"
-        messages.append({"role": "user", "content": [dict(type='image_url', image=encoded_string), dict(type='text', text=query)]})
+        messages.append({"role": "user", "content": [dict(type='image_url', image_url=encoded_string), dict(type='text', text=query)]})
     elif prompt == 'r1':
-        query = QUESTION_TEMPLATE.format(Question=query)
-        messages.append({"role": "user", "content": [dict(type='image_url', image=encoded_string), dict(type='text', text=query)]})
+        query = GROUNDING_TEMPLATE.format(Question=query)
+        messages.append({"role": "user", "content": [dict(type='image_url', image_url=encoded_string), dict(type='text', text=query)]})
     else:
-        messages.append({"role": "user", "content": [dict(type='image_url', image=encoded_string), dict(type='text', text=query)]})
+        messages.append({"role": "user", "content": [dict(type='image_url', image_url=encoded_string), dict(type='text', text=query)]})
     
     # Grounding
     text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
@@ -91,7 +126,7 @@ def inference_grounding(model, processor, sampling_params, prompt, query, image_
     else:
         inputs = processor(text=[text], images=image_inputs, padding=True, return_tensors="pt").to(model.device)
         
-        generated_ids = model.generate(**inputs, max_new_tokens=1500)
+        generated_ids = model.generate(**inputs, max_new_tokens=512)
         generated_ids_trimmed = [out_ids[len(in_ids) :] for in_ids, out_ids in zip(inputs.input_ids, generated_ids)]
         response = processor.batch_decode(generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False)
         generated_text = response[0]
@@ -105,7 +140,15 @@ def infer(model, processor, sampling_params, args):
     prompt = args.prompt
     output_path = args.output_path
     
-    dataset = load_dataset("parquet", data_files={"test": args.data_path})
+    if args.data_path.endswith('.parquet'): # KVG-Bench
+        task = 'grounding'
+        dataset = load_dataset("parquet", data_files={"test": args.data_path})
+    elif args.data_path.endswith('.json'): # FGVR
+        task = 'classification'
+        with open(args.data_path, 'r') as f:
+            dataset = json.load(f)
+    else:
+        print(f'No supported file type: {args.data_path}')
     
     with open(args.id_path, 'r') as f:
         qids = json.load(f)
@@ -116,22 +159,31 @@ def infer(model, processor, sampling_params, args):
             test_data.append(d)
     
     for data in tqdm(test_data):
-        query = data['question']
-        image_bytes = data['image']['bytes']
-        
-        gt = data['answer']
-        match = re.search(PATTERN, gt)
-        bbox = [[float(match[1]), float(match[2]), float(match[3]), float(match[4])]]
-        
-        image = Image.open(image_bytes)
-        w, h = image.size
-        
-        out_filename = f"{output_path}/temp/{data['question_id']}.json"
-        
-        response = inference_grounding(model, processor, sampling_params, prompt, query, image_bytes)
-        response['gt_bbox'] = bbox
-        response['hw'] = (h ,w)
-        
+        if task == 'grounding':
+            query = data['question']
+            image_bytes = data['image']['bytes']
+            
+            gt = data['answer']
+            match = re.search(PATTERN, gt)
+            bbox = [[float(match[1]), float(match[2]), float(match[3]), float(match[4])]]
+            
+            image = Image.open(io.BytesIO(image_bytes))
+            w, h = image.size
+            
+            out_filename = f"{output_path}/temp/{data['question_id']}.json"
+            
+            response = inference_grounding(model, processor, sampling_params, prompt, query, image_bytes)
+            response['gt_bbox'] = bbox
+            response['hw'] = (h ,w)
+        elif task == 'classification':
+            query = data['messages'][0]['content'].replace('<image>', '')
+            image = data['images'][0]
+            
+            
+            out_filename = f"{output_path}/temp/{data['question_id']}.json"
+            response = inference_grounding(model, processor, sampling_params, prompt, query, image)
+            
+            
         with open(out_filename, 'w') as f:
             json.dump(response, f)
         
@@ -140,7 +192,6 @@ def main():
     args = parse_args()
     os.makedirs(args.output_path, exist_ok=True)
 
-    sampling_params = None
     if args.vllm:
         from vllm import LLM, SamplingParams
         model = LLM(args.model_path, max_model_len=17920, tensor_parallel_size=1)
@@ -152,6 +203,7 @@ def main():
             attn_implementation="flash_attention_2",
             device_map="auto"
         )
+        sampling_params = None
     
     processor = AutoProcessor.from_pretrained(args.model_path)
 

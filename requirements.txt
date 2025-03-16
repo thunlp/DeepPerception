@@ -1,8 +1,8 @@
-datasets==3.4.0
+datasets==2.16.1
 Pillow==11.1.0
 qwen_vl_utils==0.0.10
-torch==2.5.1
-torchvision==0.20.1
-tqdm==4.67.1
-transformers==4.49.0
+torch==2.2.2
+torchvision==0.17.2
+tqdm==4.66.5
+transformers==4.45.1
 vllm==0.7.3

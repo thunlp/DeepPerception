@@ -2,29 +2,50 @@ GPU_IDs=$1
 DATA_PATH=$2
 CKPT=$3
 
-export CUDA_VISIBLE_DEVICES=$GPU_IDs
 
-DATA_PATH=/home/maxinyu/data/KVG-Bench/kvg-bench.parquet
-CKPT=/home/maxinyu/exp/R1-V/Qwen2-VL-7B-Instruct/oven-all-cot-grpo/checkpoint-800
-OUT_DIR=$CKPT/kvg-bench-eval
+if [[ $DATA_PATH == *"kvg-bench"* ]]; then 
+# KVG-Bench
+OUT_DIR=$CKPT/kvg-bench-eval-novllm
 
-# Evaluate DeepPerception on KVG-Bench
-# It is recommended to use --vllm for faster inference
+# Evaluate DeepPerception
+# To ensure precise reproduction of the experimental results of KVG-Bench presented in the paper, please strictly adhere to the package versions specified in the requirements.txt file and DO NOT use the vllm.
 
 python evaluate.py \
-    --data_path $DATASET \
+    --data_path $DATA_PATH \
     --ckpt_path $CKPT \
     --gpu_ids $GPU_IDs \
-    --output_dir_path $OUT_DIR \
-    --vllm \
-    --prompt r1
+    --output_path $OUT_DIR \
+    --prompt r1 
 
-# Evaluate Qwen2-VL on KVG-Bench
-# DO NOT use --prompt r1
-\
+# Evaluate Qwen2-VL
+# DO NOT use --prompt r1, which requires model to first output the thinking process
+
 # python evaluate.py \
 #     --data_path $DATASET \
 #     --ckpt_path $CKPT \
 #     --gpu_ids $GPU_IDs \
-#     --output_dir_path $OUT_DIR \
+#     --output_path $OUT_DIR 
+else 
+# TODO
+# FGVR
+OUT_DIR=$CKPT/fgvr-eval
+
+# Evaluate DeepPerception-FGVR
+
+python evaluate.py \
+    --data_path $DATA_PATH \
+    --ckpt_path $CKPT \
+    --gpu_ids $GPU_IDs \
+    --output_path $OUT_DIR \
+    --vllm \
+    --prompt r1
+
+# Evaluate Qwen2-VL
+
+# python evaluate.py \
+#     --data_path $DATA_PATH \
+#     --ckpt_path $CKPT \
+#     --gpu_ids $GPU_IDs \
+#     --output_path $OUT_DIR \
 #     --vllm
+fi

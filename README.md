@@ -57,7 +57,7 @@ cd DeepPerception
 2. Install Packages
 For evaluation:
 ```bash
-conda env create -n deepperception python=3.11
+conda env create -n deepperception python=3.9
 conda activate deepperception
 
 pip install -r requirements.txt
@@ -84,7 +84,7 @@ pip install -r requirements.txt
 # Evaluate on KVG-Bench
 bash eval.sh [CUDA_IDS] [KVG_BENCH_PATH] [CKPT_PATH]
 ```
-Notice: Please modify the script if you want to evaluate Qwen2-VL
+Notice: Please modify the script if you want to evaluate on Qwen2-VL.
 
 ### Training
 

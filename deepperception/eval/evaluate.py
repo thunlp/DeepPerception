@@ -10,7 +10,6 @@ from datasets import load_dataset
 from torchvision.ops.boxes import box_area
 from multiprocessing import Process
 from tqdm import tqdm
-from glob import glob
 
 
 bbox_patterns = [
@@ -25,7 +24,18 @@ bbox_patterns = [
 ]
 
 REF_PATTERN = re.compile(r'<\|object_ref_start\|>(.*?)<\|object_ref_end\|>')
+ANSWER_PATTERN = re.compile(r'<answer>(.*?)</answer>')
 
+def get_choice(ans):
+    match = re.findall(ANSWER_PATTERN, ans)
+    if len(match) > 0:
+        choice = match[0].strip()
+        if len(choice) > 1:
+            choice = choice.split('.')[0]
+        return choice
+    else:
+        return None
+    
 def box_iou(boxes1, boxes2):
     area1 = box_area(boxes1)
     area2 = box_area(boxes2)
@@ -98,67 +108,98 @@ def calculate_ious(category, results):
         
     return results, metrics
 
-def eval(args, test_data):
+def eval(task, args, test_data):
     output_path = args.output_path
-    seen_categories = args.seen_categories.split(',')
-    all_categories = args.all_categories.split(',')
     
     all_metrics = dict()
-    results = {d: [] for d in all_categories}
-    
-    all_res = []
-    seen_res = []
-    unseen_res = []
-    for data in tqdm(test_data):
-        with open(f'{output_path}/temp/{data["question_id"]}.json', 'r') as f:
-            r = json.load(f)
-            results[data["category"]].append(r)
-            all_res.append(r)
-            if data["category"] in seen_categories:
-                seen_res.append(r)
-            else:
-                unseen_res.append(r)
-
-    all_res, metrics = calculate_ious('all', all_res)
-    all_metrics['all'] = metrics
-    
-    seen_res, metrics = calculate_ious('seen domain', seen_res)
-    all_metrics['seen domain'] = metrics
-    
-    unseen_res, metrics = calculate_ious('unseen domain', unseen_res)
-    all_metrics['unseen domain'] = metrics
+    if task == 'grounding':
+        seen_categories = args.seen_categories.split(',')
+        all_categories = args.all_categories.split(',')
         
-    
-    for dataset, res in results.items():
-        res, metrics = calculate_ious(dataset, res)
-        with open(f'{args.output_path}/{dataset}.json', 'w') as f:
-            json.dump(res, f, indent=4)
+        
+        results = {d: [] for d in all_categories}
+        
+        all_res = []
+        seen_res = []
+        unseen_res = []
+        for data in tqdm(test_data):
+            with open(f'{output_path}/temp/{data["question_id"]}.json', 'r') as f:
+                r = json.load(f)
+                results[data["category"]].append(r)
+                all_res.append(r)
+                if data["category"] in seen_categories:
+                    seen_res.append(r)
+                else:
+                    unseen_res.append(r)
+
+        all_res, metrics = calculate_ious('all', all_res)
+        all_metrics['all'] = metrics
+        
+        seen_res, metrics = calculate_ious('seen domain', seen_res)
+        all_metrics['seen domain'] = metrics
+        
+        unseen_res, metrics = calculate_ious('unseen domain', unseen_res)
+        all_metrics['unseen domain'] = metrics
             
-    with open(f'{args.output_path}/metrics.json', 'w') as f:
-        json.dump(all_metrics, f)
+        for dataset, res in results.items():
+            res, metrics = calculate_ious(dataset, res)
+            all_metrics[dataset] = metrics
+            with open(f'{args.output_path}/{dataset}.json', 'w') as f:
+                json.dump(res, f, indent=4)
+                
+        with open(f'{args.output_path}/metrics.json', 'w') as f:
+            json.dump(all_metrics, f)
+            
+    elif task == 'classification':
+        correct = 0
+        match_cnt = 0
+        results = []
+        for data in tqdm(test_data):
+            with open(f'{output_path}/temp/{data["question_id"]}.json', 'r') as f:
+                r = json.load(f)
+            answer = r['answer']
+            gt = data['messages'][1]['content']
+
+            pred = get_choice(answer)
+            
+            if pred:
+                match_cnt += 1
+            if gt == pred:
+                correct += 1
+                r['correct'] = True
+            else:
+                r['correct'] = False
+            results.append(r)
+        
+        acc = correct / len(test_data)
+        print(f'Acc ({dataset}): {acc}')
+        print(f'Match rate: {match_cnt/len(test_data)}')
+        
+        category = test_data['question_id'].split('/')[0]
+        with open(f'{args.output_path}/{category}.json', 'w') as f:
+            json.dump(results, f)
+        with open(f'{args.output_path}/{category}-metrics.json', 'w') as f:
+            json.dump(all_metrics, f)
     
 
-def infer(prompt,
-          json_path, 
-          ckpt_path,
-          vllm,
-          gpu_id,
-          output_path):
+def infer(args, json_path, gpu_id):
     os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_id)
 
-    if vllm:
+    if args.vllm:
         subprocess.run(["python", 'inference.py',
-                        "--prompt", str(prompt),
+                        "--data_path", args.data_path,
+                        "--prompt", str(args.prompt),
                         "--vllm", 
-                        "--test_json_path", json_path,
-                        "--model_path", ckpt_path,
-                        "--output_path", output_path])
+                        "--id_path", json_path,
+                        "--model_path", args.ckpt_path,
+                        "--output_path", args.output_path])
     else:
         subprocess.run(["python", 'inference.py',
-                        "--prompt", str(prompt),
-                        "--test_json_path", json_path,
-                        "--model_path", ckpt_path,
-                        "--output_path", output_path])
+                        "--data_path", args.data_path,
+                        "--prompt", str(args.prompt),
+                        "--id_path", json_path,
+                        "--model_path", args.ckpt_path,
+                        "--output_path", args.output_path])
 
 def launch_subprocesses(args, temp):
     processes = []
@@ -172,8 +213,8 @@ def launch_subprocesses(args, temp):
             elif nprocs == 1:
                 gpu_ids = [args.gpu_ids]
         else: # 7B-scale models
-            nprocs = len(gpu_ids)
             gpu_ids = list(map(int, args.gpu_ids.split(',')))
+            nprocs = len(gpu_ids)
         
         num_data_per_group = len(temp) // len(gpu_ids)
         
@@ -187,13 +228,7 @@ def launch_subprocesses(args, temp):
             with open(json_path, "w") as f:
                 json.dump(temp[start_idx:end_idx], f)
 
-            p = Process(target=infer,
-                        args=(args.prompt,
-                            json_path, 
-                            args.ckpt_path,
-                            args.vllm, 
-                            gpu_id, 
-                            args.output_path))
+            p = Process(target=infer, args=(args, json_path, gpu_id))
             processes.append(p)
             p.start()
         
@@ -202,6 +237,39 @@ def launch_subprocesses(args, temp):
             
         for temp_file in temp_files:
             os.remove(temp_file)
+
+def get_data(args):
+    output_path = args.output_path
+    
+    if args.data_path.endswith('.parquet'): # KVG-Bench
+        task = 'grounding'
+        all_categories = args.all_categories.split(',')
+        for c in all_categories:
+            os.makedirs(f'{output_path}/temp/{c}', exist_ok=True)
+            
+        dataset = load_dataset("parquet", data_files={"test": args.data_path})
+        test_data = dataset['test']
+    elif args.data_path.endswith('.json'): # FGVR
+        task = 'classification'
+        with open(args.data_path, 'r') as f:
+            test_data = json.load(f)
+        
+        category = args.data_path.split('/')[-1].split('.')[0]
+        os.makedirs(f'{output_path}/temp/{category}', exist_ok=True)
+        i = 0
+        for d in test_data:
+            d['question_id'] = f'{category}/{str(i).zfill(5)}'
+    else:
+        print(f'No supported file type: {args.data_path}')
+    
+    qids = []
+    for d in test_data:
+        if not os.path.isfile(f'{output_path}/temp/{d["question_id"]}.json'):
+            qids.append(d['question_id'])
+    print(f'# Test data: {len(qids)}')
+    
+    return task, test_data, qids
+    
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Process images across multiple GPUs.")
@@ -220,26 +288,14 @@ def parse_arguments():
 
 def main():
     args = parse_arguments()
-    output_path = args.output_path
-    all_categories = args.all_categories.split(',')
-    for c in all_categories:
-        os.makedirs(f'{output_path}/temp/{c}', exist_ok=True)
     
-    print(f"Evaluating {args.ckpt_path}. Prompt: {args.prompt}. Results will be saved in {output_path}.")
+    print(f"Evaluating {args.ckpt_path}. Prompt: {args.prompt}. Results will be saved in {args.output_path}.")
     
-    dataset = load_dataset("parquet", data_files={"test": args.data_path})
-    test_data = dataset['test']
-    
-    temp = []
-    for d in test_data:
-        if not os.path.isfile(f'{output_path}/temp/{d[["question_id"]]}.json'):
-            temp.append(d['question_id'])
-    print(f'# Test data: {len(temp)}')
-    
-    launch_subprocesses(args, temp)
-    eval(args, test_data)
+    task, test_data, qids = get_data(args)
+    launch_subprocesses(args, qids)
+    eval(task, args, test_data)
 
-            
+
 
 if __name__ == "__main__":
     main()
