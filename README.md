@@ -3,13 +3,13 @@ Xinyu Ma, Ziyang Ding, Zhicong Luo, Chi Chen, Zonghao Guo, Derek F. Wong, Xiaoyi
 
 -----
 
-<a href='https://migician-vg.github.io/'><img src='https://img.shields.io/badge/Project-Page-Green'></a>
+<a href='https://deepperception-kvg.github.io/'><img src='https://img.shields.io/badge/Project-Page-Green'></a>
 <a href=''><img src='https://img.shields.io/badge/Paper-PDF-orange'></a> 
-<a href=''><img src='https://img.shields.io/badge/Model-Huggingface-red'></a> 
-<a href=''><img src='https://img.shields.io/badge/Benchmark-Huggingface-yellow'></a> 
-<a href=''><img src='https://img.shields.io/badge/Dataset-Huggingface-blue'></a> 
+<a href='https://huggingface.co/MaxyLee/DeepPerception'><img src='https://img.shields.io/badge/Model-Huggingface-red'></a> 
+<a href='https://huggingface.co/datasets/MaxyLee/KVG-Bench'><img src='https://img.shields.io/badge/Benchmark-Huggingface-yellow'></a> 
+<a href='https://huggingface.co/datasets/MaxyLee/KVG'><img src='https://img.shields.io/badge/Dataset-Huggingface-blue'></a> 
 
-This is the official repository of [DeepPerception](), an MLLM enhanced with cognitive visual perception capabilities.
+This is the official repository of **DeepPerception**, an MLLM enhanced with cognitive visual perception capabilities.
 
 ## Release
 
@@ -55,7 +55,7 @@ cd DeepPerception
 ```
 2. Install Packages
 ```bash
-conda env create -n deepperception python=3.?
+conda env create -n deepperception python=3.11
 conda activate deepperception
 
 pip install -r requirements.txt
@@ -63,13 +63,22 @@ pip install -r requirements.txt
 
 ### Data Preparation
 
+
+
 ### Checkpoints
+
+| Model                               | Links                                  |
+|---------                            |---------------------------------------|
+| DeepPerception                      | [`🤗HuggingFace`](https://huggingface.co/MaxyLee/DeepPerception)    |
+| DeepPerception-FGVR                 | [`🤗HuggingFace`](https://huggingface.co/MaxyLee/DeepPerception-FGVR)    |
+---
 
 ### Evaluation and Inference
 
+
+
 ### Training
 
-## Acknowledgement
 
 ## Citation
 
@@ -78,6 +87,8 @@ If you find DeepPerception useful for your research or applications, please cite
 ```bibtex
 TODO
 ```
+
+## Acknowledgement
 
 ## License
 
