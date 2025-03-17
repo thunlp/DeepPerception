@@ -1,4 +1,4 @@
-# DeepPerception: Advancing Cognitive Visual Perception in MLLMs for Knowledge-Intensive Visual Grounding
+# DeepPerception: Advancing R1-like Cognitive Visual Perception in MLLMs for Knowledge-Intensive Visual Grounding
 Xinyu Ma, Ziyang Ding, Zhicong Luo, Chi Chen, Zonghao Guo, Derek F. Wong, Xiaoyi Feng, Maosong Sun
 
 -----
