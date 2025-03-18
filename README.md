@@ -96,7 +96,12 @@ TODO
 If you find DeepPerception useful for your research or applications, please cite using this BibTeX:
 
 ```bibtex
-TODO
+@misc{ma2025deepperception,
+      title={DeepPerception: Advancing R1-like Cognitive Visual Perception in MLLMs for Knowledge-Intensive Visual Grounding}, 
+      author={Xinyu Ma and Ziyang Ding and Zhicong Luo and Chi Chen and Zonghao Guo and Derek F. Wong and Xiaoyi Feng and Maosong Sun},
+      year={2025},
+      url={https://arxiv.org/abs/2503.12797}, 
+}
 ```
 
 ## Acknowledgement
