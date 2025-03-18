@@ -4,7 +4,7 @@ Xinyu Ma, Ziyang Ding, Zhicong Luo, Chi Chen, Zonghao Guo, Derek F. Wong, Xiaoyi
 -----
 
 <a href='https://deepperception-kvg.github.io/'><img src='https://img.shields.io/badge/Project-Page-Green'></a>
-<a href=''><img src='https://img.shields.io/badge/Paper-PDF-Green'></a> 
+<a href='https://arxiv.org/abs/2503.12797'><img src='https://img.shields.io/badge/Paper-PDF-Green'></a> 
 <a href='https://huggingface.co/MaxyLee/DeepPerception'><img src='https://img.shields.io/badge/Model-Huggingface-Green'></a> 
 <a href='https://huggingface.co/datasets/MaxyLee/KVG-Bench'><img src='https://img.shields.io/badge/Benchmark-Huggingface-Green'></a> 
 <a href='https://huggingface.co/datasets/MaxyLee/KVG'><img src='https://img.shields.io/badge/Dataset-Huggingface-Green'></a> 
@@ -13,8 +13,8 @@ This is the official repository of **DeepPerception**, an MLLM enhanced with cog
 
 ## Release
 
-- [x] **`2025.03.17`** 🔥Release the DeepPerception evaluation code and model in [`🤗HuggingFace`](https://huggingface.co/MaxyLee/DeepPerception).
-- [x] **`2025.03.17`** 🔥DeepPerception Paper has been released in [`📕Arxiv`]().
+- [x] **`2025.03.18`** 🔥Release the DeepPerception evaluation code and model in [`🤗HuggingFace`](https://huggingface.co/MaxyLee/DeepPerception).
+- [x] **`2025.03.18`** 🔥DeepPerception Paper has been released in [`📕Arxiv`](https://arxiv.org/abs/2503.12797).
 
 ## Overview
 
