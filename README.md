@@ -3,11 +3,11 @@ Xinyu Ma, Ziyang Ding, Zhicong Luo, Chi Chen, Zonghao Guo, Derek F. Wong, Xiaoyi
 
 -----
 
-<a href='https://deepperception-kvg.github.io/'><img src='https://img.shields.io/badge/Project-Page-Green'></a>
+<a href='https://deepperception-kvg.github.io/'><img src='https://img.shields.io/badge/Project-Page-Blue'></a>
 <a href='https://arxiv.org/abs/2503.12797'><img src='https://img.shields.io/badge/Paper-PDF-Green'></a> 
-<a href='https://huggingface.co/MaxyLee/DeepPerception'><img src='https://img.shields.io/badge/Model-Huggingface-Green'></a> 
-<a href='https://huggingface.co/datasets/MaxyLee/KVG-Bench'><img src='https://img.shields.io/badge/Benchmark-Huggingface-Green'></a> 
-<a href='https://huggingface.co/datasets/MaxyLee/KVG'><img src='https://img.shields.io/badge/Dataset-Huggingface-Green'></a> 
+<a href='https://huggingface.co/MaxyLee/DeepPerception'><img src='https://img.shields.io/badge/Model-Huggingface-Yellow'></a> 
+<a href='https://huggingface.co/datasets/MaxyLee/KVG-Bench'><img src='https://img.shields.io/badge/Benchmark-Huggingface-Orange'></a> 
+<a href='https://huggingface.co/datasets/MaxyLee/KVG'><img src='https://img.shields.io/badge/Dataset-Huggingface-Purple'></a> 
 
 This is the official repository of **DeepPerception**, an MLLM enhanced with cognitive visual perception capabilities.
 
