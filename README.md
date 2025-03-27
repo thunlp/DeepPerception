@@ -57,7 +57,7 @@ cd DeepPerception
 2. Install Packages
 For evaluation:
 ```bash
-conda env create -n deepperception python=3.9
+conda create -n deepperception python=3.9
 conda activate deepperception
 
 pip install -r requirements.txt
