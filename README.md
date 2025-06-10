@@ -174,7 +174,7 @@ conda create -n r1-v python=3.11
 conda activate r1-v
 ```
 
-To set up the environment for GRPO training, please follow the instructions in the provided re
+To set up the environment for GRPO training, please follow the instructions in the provided repository.
 
 We also provide a reference `deepperception/train/grpo/requirements.txt` file in this directory for convenience:
 ```bash
