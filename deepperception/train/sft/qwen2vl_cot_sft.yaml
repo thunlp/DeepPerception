@@ -1,0 +1,43 @@
+### model
+model_name_or_path: path/to/Qwen2-VL-7B-Instruct
+image_max_pixels: 401408
+
+### method
+stage: sft
+do_train: true
+finetuning_type: full
+freeze_vision_tower: true  # choices: [true, false]
+freeze_multi_modal_projector: true  # choices: [true, false]
+train_mm_proj_only: false  # choices: [true, false]
+deepspeed: examples/deepspeed/ds_z3_config.json  # choices: [ds_z0_config.json, ds_z2_config.json, ds_z3_config.json]
+
+### dataset
+dataset: 
+  - kvg-aircraft
+  - kvg-car
+  - kvg-reptilia
+  - kvg-bird
+  - kvg-food
+template: qwen2_vl
+cutoff_len: 4096
+overwrite_cache: true
+preprocessing_num_workers: 16
+
+### output
+run_name: qwen2-kvg-cot-sft
+output_dir: path/to/output_dir/kvg-cot-sft
+logging_steps: 10
+save_steps: 3000
+plot_loss: true
+overwrite_output_dir: true
+
+### train
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 1
+learning_rate: 5.0e-6
+num_train_epochs: 1.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: true
+ddp_timeout: 180000000
+
