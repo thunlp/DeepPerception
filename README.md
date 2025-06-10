@@ -97,7 +97,7 @@ DeepPerception uses a two-stage training framework:
 
 Please clone the following repository and follow the instructions to set up the training environment: https://github.com/hiyouga/LLaMA-Factory.
 
-We recommend creating a new **conda environment** specifically for this stage to avoid potential package version conflicts.
+We recommend creating a new conda environment specifically for this stage to avoid potential package version conflicts.
 
 ```bash
 conda create -n cot-sft python=3.9
