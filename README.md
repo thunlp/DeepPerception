@@ -13,6 +13,7 @@ This is the official repository of **DeepPerception**, an MLLM enhanced with cog
 
 ## Release
 
+- [x] **`2025.06.10`** 🔥Release the DeepPerception training code ans scripts.
 - [x] **`2025.03.18`** 🔥Release the DeepPerception evaluation code and model in [`🤗HuggingFace`](https://huggingface.co/MaxyLee/DeepPerception).
 - [x] **`2025.03.18`** 🔥DeepPerception Paper has been released in [`📕Arxiv`](https://arxiv.org/abs/2503.12797).
 
@@ -54,8 +55,7 @@ Experimental results demonstrate that DeepPerception significantly outperforms d
 git clone https://github.com/MaxyLee/DeepPerception.git
 cd DeepPerception
 ```
-2. Install Packages
-For evaluation:
+2. Install packages for evaluation:
 ```bash
 conda create -n deepperception python=3.9
 conda activate deepperception
@@ -89,7 +89,126 @@ Notice: Please modify the script if you want to evaluate on Qwen2-VL.
 
 ### Training
 
-TODO
+DeepPerception uses a two-stage training framework:
+
+#### Stage 1: CoT-SFT
+
+**Environment Setup**:
+
+Please clone the following repository and follow the instructions to set up the training environment: https://github.com/hiyouga/LLaMA-Factory.
+
+We recommend creating a new **conda environment** specifically for this stage to avoid potential package version conflicts.
+
+```bash
+conda create -n cot-sft python=3.9
+conda activate cot-sft
+```
+
+You may also use the provided `deepperception/train/sft/requirements.txt` file as a quick reference:
+```bash
+cd deepperception/train/sft
+pip install -r requirements.txt
+```
+
+**Data Preparation**:
+
+1. Download the training data from [`🤗KVG`](https://huggingface.co/datasets/MaxyLee/KVG) and unzip `images.zip`.
+2. Configure dataset in `LLaMA-Factory/data/dataset_info.json`:
+
+```json
+"kvg-*": {
+    "file_name": "path/to/cot-sft-*.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+},
+...
+```
+
+- Replace `"path/to/cot-sft-*.json"` with the actual path to your downloaded JSON files
+
+- Update image paths in the JSON files to point to your local unzipped `images` directory
+
+**Training**:
+
+Follow these steps to launch the training:
+
+1. Open `qwen2vl_cot_sft.yaml` (located in `deepperception/train/sft`) and update these critical paths:
+
+```yaml
+# Example configuration snippet
+model_name_or_path: '/absolute/path/to/your/base_model'  # Update base model location
+output_dir: '/absolute/path/to/output/checkpoints'      # Update checkpoint directory
+deepspeed: ...
+```
+
+```bash
+# Navigate to LLaMA-Factory root directory
+cd /path/to/LLaMA-Factory
+
+# Set GPU visibility (adjust based on your GPU setup)
+export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
+
+# Launch distributed training
+FORCE_TORCHRUN=1 llamafactory-cli train /path/to/qwen2vl_cot_sft.yaml
+```
+
+#### Stage 2: GRPO
+
+The training code, environment setup instructions, and launch scripts for this stage are all available at: https://github.com/MaxyLee/R1-V.
+
+**Environment Setup**:
+
+Due to potential package version conflicts, we recommend creating a new conda environment specifically for this training stage:
+
+```bash
+conda create -n r1-v python=3.11 
+conda activate r1-v
+```
+
+To set up the environment for GRPO training, please follow the instructions in the provided re
+
+We also provide a reference `deepperception/train/grpo/requirements.txt` file in this directory for convenience:
+```bash
+pip install -r requirements.txt
+```
+
+**Data Preparation**:
+
+Set dataset path in `R1-V/src/open-r1-multimodal/src/open_r1/grpo.py`:
+
+```python
+DATA_PATH = "/path/to/kvg_dataset"
+```
+
+**Training**:
+
+Follow these steps to launch the training:
+
+1. Update `R1-V/src/open-r1-multimodal/run_grpo.sh` parameters:
+
+```bash
+CKPT="/path/to/stage1/checkpoint"
+OUTPUT_DIR="/path/to/output_dir"
+...
+```
+
+2. To start training with the GRPO objective, run the following script:
+```bash
+# Navigate to open-r1-multimodal directory
+cd R1-V/src/open-r1-multimodal
+
+# Launch training
+bash run_grpo.sh
+```
 
 ## Citation
 
