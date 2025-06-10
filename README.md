@@ -176,8 +176,9 @@ conda activate r1-v
 
 To set up the environment for GRPO training, please follow the instructions in the provided repository.
 
-We also provide a reference `deepperception/train/grpo/requirements.txt` file in this directory for convenience:
+We also provide a reference `deepperception/train/grpo/requirements.txt` file for convenience:
 ```bash
+cd deepperception/train/grpo
 pip install -r requirements.txt
 ```
 
