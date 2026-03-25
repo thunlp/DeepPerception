@@ -19,8 +19,9 @@ This is the official repository of **KARL**, an MLLM enhanced with Knowledge-Awa
 
 <p align="center">
     <img src="figs/header.jpg" width="100%"></a><br>
-    Figure 1: (a) While the MLLM can correctly recognize the entity (Q1), it fails to ground it (Q2), revealing an inconsistency between knowledge and grounding. Our method integrates knowledge-guided reasoning to bridge this gap. (b) (b) \ours achieves substantially stronger grounding performance than the baseline model and zero-shot CoT prompting, showing that knowledge-guided reasoning for KVG cannot be effectively induced by simple prompting alone.
+Figure 1: (a) While the MLLM can correctly recognize the entity (Q1), it fails to ground it (Q2), revealing an inconsistency between knowledge and grounding. Our method integrates knowledge-guided reasoning to bridge this gap. (b) <strong>KARL</strong> achieves substantially stronger grounding performance than the baseline model and zero-shot CoT prompting, showing that knowledge-guided reasoning for KVG cannot be effectively induced by simple prompting alone.
 </p>
+
 
 ### Abstract
 
