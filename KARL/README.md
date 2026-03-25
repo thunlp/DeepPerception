@@ -1,6 +1,6 @@
 # KARL: Knowledge-Aware Reasoning and Reinforcement Learning for Knowledge-Intensive Visual Grounding
 
-Xinyu Ma∗ , Ziyang Ding∗ , Zhicong Luo, Chi Chen4, Zonghao Guo, Xuebo Liu, Derek F. Wong, Zhen Zhao, Xiaoyi Feng, Maosong Sun
+Xinyu Ma∗ , Ziyang Ding∗ , Zhicong Luo, Chi Chen, Zonghao Guo, Xuebo Liu, Derek F. Wong, Zhen Zhao, Xiaoyi Feng, Maosong Sun
 
 <a href='https://deepperception-kvg.github.io/'><img src='https://img.shields.io/badge/Project-Page-blue'></a>
 <a href='https://arxiv.org/abs/2503.12797'><img src='https://img.shields.io/badge/Paper-PDF-Green'></a> 
