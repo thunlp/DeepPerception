@@ -4,7 +4,7 @@ export VLLM_DISABLE_USAGE_STATS=1
 
 # KVG-Bench
 GPU_IDs="0,1,2,3,4,5,6,7"
-DATA_PATH=./data/KVG-Bench/kvg-bench.parquet
+DATA_PATH=/path/to/data/KVG-Bench/kvg-bench.parquet
 
 CKPT=/path/to/your/checkpoint/Qwen3-VL-8B-Instruct
 
