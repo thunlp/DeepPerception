@@ -91,6 +91,8 @@ In `karl/eval/eval.sh`, configure the following:
 - `CKPT`: the path to the Qwen3-VL model
 - `OUT_DIR`: the output directory for evaluation results
 
+Also，in `karl/eval/evaluate.py`, you need to configure `seen_train_entities_path`, `visual_knowledge_path` , `visual_knowledge_ood_path` and `visual_knowledge_test_ood_path` to point to the corresponding JSON files in the dataset directory KVG-KARL/knowledge [[`🤗HuggingFace`](https://huggingface.co/datasets/Oscar-dzy/KVG-KARL)].
+
 Then，run the command:
 
 ```bash
