@@ -135,7 +135,7 @@ cd /path/to/LLaMA-Factory
 pip install -e .
 ```
 
-Tips: Additionally, you can also set up the environment by following the installation guide of [LLaMA-Factory]([hiyouga/LlamaFactory: Unified Efficient Fine-Tuning of 100+ LLMs & VLMs (ACL 2024)](https://github.com/hiyouga/LlamaFactory?tab=readme-ov-file#installation)).
+Tips: Additionally, you can also set up the environment by following the installation guide of [LLaMA-Factory](https://github.com/hiyouga/LlamaFactory?tab=readme-ov-file#installation).
 
 **Data Preparation**:
 
