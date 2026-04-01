@@ -125,12 +125,17 @@ conda create -n cot-sft python=3.10.0
 conda activate cot-sft
 ```
 
-You may also use the provided `deepperception/train/sft/requirements.txt` file as a quick reference:
+You may also use the provided `karl/train/sft/requirements.txt` file as a quick reference and install the LLaMA-Factory source code under `/path/to/LLaMA-Factory` :
 
 ```bash
 cd karl/train/sft
 pip install -r requirements.txt
+
+cd /path/to/LLaMA-Factory
+pip install -e .
 ```
+
+Tips: Additionally, you can also set up the environment by following the installation guide of [LLaMA-Factory]([hiyouga/LlamaFactory: Unified Efficient Fine-Tuning of 100+ LLMs & VLMs (ACL 2024)](https://github.com/hiyouga/LlamaFactory?tab=readme-ov-file#installation)).
 
 **Data Preparation**:
 
