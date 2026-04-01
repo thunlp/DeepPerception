@@ -51,7 +51,6 @@ joblib==1.5.3
 kiwisolver==1.4.9
 lazy_loader==0.4
 librosa==0.11.0
--e git+https://github.com/hiyouga/LLaMA-Factory.git@3057db15c33cc2b3b13e36712c5663e250a73136#egg=llamafactory
 llvmlite==0.46.0
 markdown-it-py==4.0.0
 MarkupSafe==3.0.3
@@ -84,7 +83,6 @@ nvidia-nvshmem-cu12==3.4.5
 nvidia-nvtx-cu12==12.8.90
 omegaconf==2.3.0
 orjson==3.11.7
-packaging @ file:///home/task_176104877067765/conda-bld/packaging_1761049113113/work
 pandas==2.3.3
 peft==0.17.1
 pillow==11.3.0
