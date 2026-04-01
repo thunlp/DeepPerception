@@ -39,7 +39,7 @@ def parse_args():
     parser.add_argument("--output_path", required=True)
     parser.add_argument("--infer_model", required=True, help="The model used to inference")
     parser.add_argument('--vllm', action='store_true')
-    parser.add_argument("--seed", required=True)
+    parser.add_argument("--seed", required=True, type=int)
 
     parser.add_argument("--batch_size", required=False, type=int, default=1)
 
@@ -174,8 +174,8 @@ def main():
         from vllm import LLM, SamplingParams
         num = torch.cuda.device_count()
         print(f"Num visiable gpu: {num}")
-        model = LLM(args.model_path, max_model_len=17920, tensor_parallel_size=num, gpu_memory_utilization=0.6)
-        sampling_params = SamplingParams(n=1, temperature=0.5, max_tokens=4096)
+        model = LLM(args.model_path, max_model_len=17920, tensor_parallel_size=num, gpu_memory_utilization=0.6, seed=int(args.seed))
+        sampling_params = SamplingParams(n=1, temperature=0.5, max_tokens=4096, seed=int(args.seed))
         # sampling_params = SamplingParams(n=1, temperature=0.5, max_tokens=4096)
 
     else:

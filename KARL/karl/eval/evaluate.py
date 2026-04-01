@@ -44,23 +44,23 @@ entity_patterns = [
 ]
 
 
-seen_train_entities_path = "./knowledge/all_entities_train.json"
+seen_train_entities_path = "/path/to/data/KVG-KARL/knowledge/all_entities_train.json"
 
-visual_knowledge_path = "./knowledge/results-visual_knowledge.json"
+visual_knowledge_path = "/path/to/data/KVG-KARL/knowledge/results-visual_knowledge.json"
 with open(visual_knowledge_path, "r") as f:
     visual_knowledge_dataset = json.load(f)
 entity_to_visual_knowledge = {}
 for data_entity_name in visual_knowledge_dataset:
     entity_to_visual_knowledge[data_entity_name] = visual_knowledge_dataset[data_entity_name]["knowledge_category"]
 
-visual_knowledge_ood_path = "./knowledge/results-visual_knowledge-trainood.json"
+visual_knowledge_ood_path = "/path/to/data/KVG-KARL/knowledge/results-visual_knowledge-trainood.json"
 with open(visual_knowledge_ood_path, "r") as f:
     visual_knowledge_ood_dataset = json.load(f)
 ood_entity_to_visual_knowledge = {}
 for data_entity_name in visual_knowledge_ood_dataset:
     ood_entity_to_visual_knowledge[data_entity_name] = visual_knowledge_ood_dataset[data_entity_name]["knowledge_category"]
 
-visual_knowledge_test_ood_path = "./knowledge/results-visual_knowledge-testood.json"
+visual_knowledge_test_ood_path = "/path/to/data/KVG-KARL/knowledge/results-visual_knowledge-testood.json"
 with open(visual_knowledge_test_ood_path, "r") as f:
     visual_knowledge_testood_dataset = json.load(f)
 testood_entity_to_visual_knowledge = {}
