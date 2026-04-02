@@ -49,11 +49,11 @@ Extensive experiments show that our approach consistently outperforms a wide ran
 
 ### Environment
 
-1. Clone this repository and navigate to DeepPerception folder
+1. Clone this repository and navigate to KARL folder
 
 ```bash
-git clone https://github.com/MaxyLee/DeepPerception.git
-cd DeepPerception/KARL
+git clone https://github.com/thunlp/KARL.git
+cd /path/to/KARL
 ```
 
 2. Install packages for evaluation:
