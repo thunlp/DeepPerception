@@ -12,8 +12,8 @@ This is the official repository of **KARL**, an MLLM enhanced with Knowledge-Awa
 
 ## Release
 
-- [x] **`2026.03.28`** 🔥Release the KARL evaluation & training code and model in [`🤗HuggingFace`](https://huggingface.co/Oscar-dzy/KARL).
-- [x] **`2026.03.28`** 🔥KARL Paper has been released in [`📕Arxiv`](https://arxiv.org/abs/2503.12797). (TODO)
+- [x] **`2026.04.02`** 🔥Release the KARL evaluation & training code and model in [`🤗HuggingFace`](https://huggingface.co/Oscar-dzy/KARL).
+- [x] **`2026.04.02`** 🔥KARL Paper has been released in [`📕Arxiv`](https://arxiv.org/abs/2503.12797). 
 
 ## Overview
 
