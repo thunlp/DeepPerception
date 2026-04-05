@@ -194,10 +194,18 @@ Please follow the link to train using Knowledge-Aware GRPO: https://github.com/O
 
 ## Citation
 
-If you find KARL useful for your research or applications, please cite using this BibTeX: (TODO)
+If you find KARL useful for your research or applications, please cite using this BibTeX:
 
 ```bibtex
-
+@misc{ma2026karlknowledgeawarereasoningreinforcement,
+      title={KARL: Knowledge-Aware Reasoning and Reinforcement Learning for Knowledge-Intensive Visual Grounding}, 
+      author={Xinyu Ma and Ziyang Ding and Zhicong Luo and Chi Chen and Zonghao Guo and Derek F. Wong and Zhen Zhao and Xiaoyi Feng and Maosong Sun},
+      year={2026},
+      eprint={2503.12797},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2503.12797}, 
+}
 ```
 
 ## Acknowledgement
